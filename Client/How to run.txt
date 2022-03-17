@@ -1,0 +1,6 @@
+To run thus project:
+Create a new angular project
+Pull this project from git to your local machine
+Run npm install in the directory of the project, this will install all the packages and dependencies from node modules
+Run ng serve
+Visit: localhost:4200 on any browser

@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  app:
+    restart: always
+    build:
+      context: .
+    command: python manage.py runserver 0.0.0.0:9000
+    volumes:
+      - ./app:/app
+    ports:
+      - "9000:9000"
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=foo
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - NEO4J_BOLT_URL=bolt://neo4j:neo4j@neo4jdatabase:7687
+    depends_on:
+      - neo4jdatabase
+
+  neo4jdatabase:
+    image: neo4j:3.2
+    container_name: neo4jdb
+    volumes:
+      - ./.docker-data/neo4j:/data
+      - ./.docker-data/conf:/conf
+      - ./.docker-data/certificates:/certificates
+      - ./.docker-data/plugins:/plugins
+      - ./.docker-data/logs:/logs
+      - ./.docker-data/import:/import
+    environment:
+      - NEO4J_AUTH=none
+      - NEO4J_dbms_memory_pagecache_size=11G
+      - NEO4J_dbms_memory_heap_max__size=4G
+      - NEO4J_dbms_connector_bolt_address=0.0.0.0:7687
+    ports:
+
+      - "7474:7474"
+      - "7687:7687"
